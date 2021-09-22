@@ -26,11 +26,26 @@ const draw = (context, element) => {
       context.stroke();
       break;
     case "triangle":
+      var coordinates = [],
+        angle = 100,
+        sides = 3,
+        radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)),
+        index = 0;
+
+      for (index = 0; index < sides; index++) {
+        coordinates.push({
+          x: x2 + radius * Math.cos(angle),
+          y: y2 - radius * Math.sin(angle),
+        });
+        angle += (2 * Math.PI) / sides;
+      }
       context.beginPath();
-      context.moveTo(x2, y2);
-      context.lineTo(x1, y1);
-      context.lineTo(x1 + (x1 - y1), y2);
+      context.moveTo(coordinates[0].x, coordinates[0].y);
+      for (index = 1; index < sides; index++) {
+        context.lineTo(coordinates[index].x, coordinates[index].y);
+      }
       context.closePath();
+      context.strokeStyle = "black";
       context.stroke();
 
       break;
@@ -49,6 +64,7 @@ const draw = (context, element) => {
       break;
     case "pencil":
       return { id, type, points };
+
     default:
       throw Error("Type not recognised");
   }
